@@ -1,3 +1,5 @@
+console.log("Script is loaded and running.");
+
 document.getElementById('eventForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
