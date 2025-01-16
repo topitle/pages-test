@@ -11,7 +11,6 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
   console.log("Title:", title);
   console.log("Description:", description);
   console.log("Date:", dateTime);
-  console.log("ICS Content:", icsContent);
 
   if (isNaN(dateTime.getTime())) {
     alert('Please select a valid date and time.');
@@ -29,6 +28,8 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     'END:VEVENT',
     'END:VCALENDAR'
   ].join('\n');
+  
+   console.log("ICS Content:", icsContent);
 
   // Create a downloadable link
   const blob = new Blob([icsContent], { type: 'text/calendar' });
