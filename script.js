@@ -17,29 +17,26 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     return;
   }
 
-  // Create .ics file content
-  const icsContent = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'BEGIN:VEVENT',
-    `DTSTART:${formatDate(dateTime)}`,
-    `SUMMARY:${title}`,
-    `DESCRIPTION:${description}`,
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ].join('\n');
-  
-   console.log("ICS Content:", icsContent);
+  const event = {
+    title,
+    description,
+    start: startDate.toISOString(),
+    duration: [1, 'hour'], // Duration of 1 hour
+  };
 
-  // Create a downloadable link
-  const blob = new Blob([icsContent], { type: 'text/calendar' });
-  const url = URL.createObjectURL(blob);
+  // Use calendarLink (exposed globally)
+  const googleLink = calendarLink.google(event);
+  const outlookLink = calendarLink.outlook(event);
+  const icsLink = calendarLink.ics(event);
 
-  const downloadLink = document.getElementById('downloadLink');
-  downloadLink.href = url;
-  downloadLink.download = `${title.replace(/\s+/g, '_')}.ics`;
-  downloadLink.style.display = 'inline-block';
-  downloadLink.textContent = 'Download Event';
+  // Add links to the page
+  const calendarLinksDiv = document.getElementById('calendarLinks');
+  calendarLinksDiv.innerHTML = `
+    <p><a href="${googleLink}" target="_blank">Add to Google Calendar</a></p>
+    <p><a href="${outlookLink}" target="_blank">Add to Outlook Calendar</a></p>
+    <p><a href="data:text/calendar;charset=utf-8,${encodeURIComponent(icsLink)}" download="${title.replace(/\s+/g, '_')}.ics">Download .ICS</a></p>
+  `;
+
 });
 
 // Helper function to format date for iCalendar
